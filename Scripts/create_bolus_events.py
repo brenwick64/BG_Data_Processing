@@ -9,8 +9,10 @@ filenames = glob.glob(path + "/*.csv")
 
 # Argparse config
 parser = argparse.ArgumentParser()
-parser.add_argument("-g", "--gap",
-                    help="The amount of contextual hours surrounding a single bolus event", type=int)
+parser.add_argument("-bh", "--beforehours",
+                    help="The amount of contextual hours before a bolus event", type=int)
+parser.add_argument("-ah", "--afterhours",
+                    help="The amount of contextual hours after a bolus event", type=int)
 args = parser.parse_args()
 
 
@@ -85,16 +87,17 @@ def index_to_bolus_event(table, bolus_index):
 # __SCRIPT START__
 
 # Cheks for required args
-if(args.gap == None):
-    print("error: arguments: -g, --gap requried (-h for help info)")
+if(args.beforehours == None or args.afterhours == None):
+    print(
+        "error: arguments: [-bh ah], [--beforehours, --afterhours] requried (-h for help info)")
     sys.exit()
 
 # Checks gap appropriate value
-elif(args.gap > 12 or args.gap < 1):
+elif((args.beforehours > 12 or args.beforehours < 1) or (args.afterhours > 12 or args.afterhours < 1)):
     print("error: argument -g must be an integer (1-12)")
     sys.exit()
 
-hour_gap = args.gap
+hour_gap = args.beforehours
 df_columns = []
 
 # Allocates 4 distinct columns for each hourly context slice within the time gap
