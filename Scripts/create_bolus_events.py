@@ -1,7 +1,5 @@
 import pandas as pd
 import glob
-import argparse
-import sys
 
 output_csv = '../Processed_Data/bolus_events_max.csv'
 path = '../Clean_Batches/'
