@@ -13,10 +13,10 @@ parser.add_argument("-ah", "--afterhours",
 args = parser.parse_args()
 
 
-# Runs processes with gap args
+# Runs processes
 def process_data(beforehours, afterhours):
     subprocess.run(
-        ["python", "create_bolus_events.py", "-bh", str(beforehours), "-ah", str(afterhours)], cwd=PATH+"/Scripts")
+        ["python", "create_bolus_events.py"], cwd=PATH+"/Scripts")
     subprocess.run(["python", "prep_bolus_events.py", "-bh", str(beforehours), "-ah", str(afterhours)],
                    cwd=PATH+"/Scripts")
 

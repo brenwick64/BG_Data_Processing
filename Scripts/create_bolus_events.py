@@ -3,18 +3,9 @@ import glob
 import argparse
 import sys
 
-output_csv = '../Processed_Data/bolus_events_dirty.csv'
+output_csv = '../Processed_Data/bolus_events_max.csv'
 path = '../Clean_Batches/'
 filenames = glob.glob(path + "/*.csv")
-
-# Argparse config
-parser = argparse.ArgumentParser()
-parser.add_argument("-bh", "--beforehours",
-                    help="The amount of contextual hours before a bolus event", type=int)
-parser.add_argument("-ah", "--afterhours",
-                    help="The amount of contextual hours after a bolus event", type=int)
-args = parser.parse_args()
-
 
 # __DATA CONSTANTS__
 
@@ -24,6 +15,8 @@ batch_size = 5
 bolus_row_index = 2
 # The length of all table rows
 table_row_length = 25
+# The maximum context span for X and Y data
+max_hour_span = 12
 
 
 # __HELPER FUNCTIONS__
@@ -85,19 +78,7 @@ def index_to_bolus_event(table, bolus_index):
 
 
 # __SCRIPT START__
-
-# Cheks for required args
-if(args.beforehours == None or args.afterhours == None):
-    print(
-        "error: arguments: [-bh ah], [--beforehours, --afterhours] requried (-h for help info)")
-    sys.exit()
-
-# Checks gap appropriate value
-elif((args.beforehours > 12 or args.beforehours < 1) or (args.afterhours > 12 or args.afterhours < 1)):
-    print("error: argument -g must be an integer (1-12)")
-    sys.exit()
-
-hour_gap = args.beforehours
+hour_gap = max_hour_span
 df_columns = []
 
 # Allocates 4 distinct columns for each hourly context slice within the time gap
